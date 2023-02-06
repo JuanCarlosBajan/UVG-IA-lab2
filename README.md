@@ -31,10 +31,10 @@ Se incluyen las siguientes clases
 
 ### Clase BayesianNetwork
 
-#### add_node(nombre, valores, probabilidades): Agrega un nodo a la red bayesiana con el nombre especificado, los valores posibles y las probabilidades iniciales.
+- add_node(nombre, valores, probabilidades): Agrega un nodo a la red bayesiana con el nombre especificado, los valores posibles y las probabilidades iniciales.
 
-#### add_edge(nodo_padre, nodo_hijo, probabilidades): Agrega una relación entre dos nodos de la red bayesiana, especificando las probabilidades condicionales.
+- add_edge(nodo_padre, nodo_hijo, probabilidades): Agrega una relación entre dos nodos de la red bayesiana, especificando las probabilidades condicionales.
 
 ### Clase Inference
 
-#### probability(nodo, evidencias): Devuelve la distribución de probabilidad de un nodo dado un conjunto de evidencias.
+- probability(nodo, evidencias): Devuelve la distribución de probabilidad de un nodo dado un conjunto de evidencias.
