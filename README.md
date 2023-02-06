@@ -5,12 +5,12 @@ Una librería para construir redes bayesianas y realizar inferencia probabilíst
 ## Instalación
 
 Con el manejador de paquetes pip:
-_pip install mi_libreria_python_
+\_pip install redes_bayesianas
 
 ## Uso
 
 <sub> 
-    import mi_libreria_python
+    import redes_bayesianas
 
     # Crea una red bayesiana
     red_bayesiana = mi_libreria_python.BayesianNetwork()
