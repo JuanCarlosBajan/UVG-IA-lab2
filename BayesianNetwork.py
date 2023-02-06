@@ -5,7 +5,7 @@ class Node:
         self.title = title
         self.connections = []
 
-        if probability_of_success:
+        if probability_of_success is not None:
             if probability_of_success > 1 or probability_of_success < 0:
                 raise ValueError("This probability of success is wrong")
 
@@ -101,6 +101,15 @@ class BayesianNetwork:
     def get_nodes(self):
         return self.nodes
     
+    def get_node(self, node_title: str):
+        return list(
+                    filter(
+                        lambda node: 
+                            node_title == node.title,
+                        self.nodes
+                    )
+                )[0]  
+
     def delete_node(self, node_title:str):
         before_i = len(self.nodes)
         self.nodes = list(
@@ -147,6 +156,41 @@ class BayesianNetwork:
             )
         )
 
+    def probabilistic_inference(self, node_title:str):
+        current_node = self.get_node(node_title)
+
+        if current_node.success is not None: 
+            return {
+                'success': current_node.success,
+                'fail': current_node.fail
+            }
+        
+        parents = self.get_parents(node_title)
+        parents_title = [parent.title for parent in parents]
+        connections = []
+
+        for parent in parents:
+
+            parent_probability = self.probabilistic_inference(parent.title)
+
+            found_connections = list(
+                filter(
+                    lambda connection:
+                    connection['title'] == node_title,
+                    parent.connections
+                )
+            )
+
+            for connection in found_connections:
+                connection['parent'] = parent.title
+
+            connections += found_connections
+        
+        if len(connections) < len(parents)*2:
+            print('The amount of connections parents have to node "' + node_title + '" arent enough.\n You are missing ' + str(len(parents)*2 - len(connections)) + " connections.")
+
+        for parent in parents:
+
 
 node_a = Node('a',0.6)
 node_a.add_connection('b',0.4,True)
@@ -169,5 +213,5 @@ network.add_node(node_a)
 network.add_node(node_b)
 network.add_node(node_c)
 
-print([node.title for node in network.get_parents('a')])
+print(network.probabilistic_inference('b'))
 
