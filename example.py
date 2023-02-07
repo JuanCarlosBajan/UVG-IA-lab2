@@ -1,0 +1,2 @@
+import redes_bayesianas_rey20074
+print(dir(redes_bayesianas_rey20074))

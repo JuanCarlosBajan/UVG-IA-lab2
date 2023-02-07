@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: redes-bayesianas-rey20074
-Version: 0.0.1
+Version: 0.0.2
 Summary: Una libreria para construir redes bayesianas y realizar inferencia probabilística
 Author-email: Jose Reyes <josemarianoreyesh02@gmail.com>, Esteban Aldana Reyes <example@gmail.com>, Juan Carlos Bajan <exmple@gmail.com>, Kenneth Galvez <example@gmail.com>
 Project-URL: Homepage, https://github.com/JuanCarlosBajan/UVG-IA-lab2
@@ -18,12 +18,15 @@ Una librería para construir redes bayesianas y realizar inferencia probabilíst
 ## Instalación
 
 Con el manejador de paquetes pip:
-\_pip install redes_bayesianas
+
+- **pip install redes-bayesianas-rey20074==0.0.1**
 
 ## Uso
 
 <sub> 
-    import redes_bayesianas
+    
+    # importa la libreria
+    import redes_bayesianas_20074
 
     # Crea una red bayesiana
     red_bayesiana = mi_libreria_python.BayesianNetwork()
