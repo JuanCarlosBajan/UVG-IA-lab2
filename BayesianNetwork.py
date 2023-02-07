@@ -301,26 +301,30 @@ class BayesianNetwork:
             return self.one_parent_probabilistic_inference(node_title)
         
 
-node_a = Node('a',0.01)
-node_a.add_connection('b',0.9,True)
-node_a.add_connection('b',0.8,False)
-node_a.add_connection('c',0.9,True)
-node_a.add_connection('c',0.8,False)
+node_b = Node('b',0.001)
 
+node_e = Node('e',0.002)
 
+node_a = Node('a', multiple_parents= True)
+node_a.add_connection_multiple_parents({ 'b':True,'e':True},0.95)
+node_a.add_connection_multiple_parents({ 'b':True,'e':False},0.94)
+node_a.add_connection_multiple_parents({ 'b':False,'e':True},0.29)
+node_a.add_connection_multiple_parents({ 'b':False,'e':False},0.001)
+node_a.add_connection('j',0.9,True)
+node_a.add_connection('j',0.05,False)
+node_a.add_connection('m',0.7,True)
+node_a.add_connection('m',0.01,False)
 
-node_b = Node('b')
+node_j = Node('j')
+node_m = Node('m')
 
-node_c = Node('c', multiple_parents= False)
-""" node_c.add_connection_multiple_parents({ 'a':True,'b':True},0.9)
-node_c.add_connection_multiple_parents({ 'a':True,'b':False},0.5)
-node_c.add_connection_multiple_parents({ 'a':False,'b':True},0.7)
-node_c.add_connection_multiple_parents({ 'a':False,'b':False},0.2) """
 
 network = BayesianNetwork()
 network.add_node(node_a)
 network.add_node(node_b)
-network.add_node(node_c)
+network.add_node(node_e)
+network.add_node(node_j)
+network.add_node(node_m)
 
-print(network.probabilistic_inference('a'))
+print(network.probabilistic_inference('m'))
 
