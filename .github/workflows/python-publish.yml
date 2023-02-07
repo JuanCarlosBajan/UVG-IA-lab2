@@ -15,6 +15,9 @@ on:
 env:
   NEW_VERSION: ${{ env.GITHUB_REF }}
 
+permissions:
+  contents: read
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
