@@ -1,9 +1,11 @@
 import warnings
 
 class Node:
-    def __init__(self, title: str, probability_of_success:float = None):
+    def __init__(self, title: str, probability_of_success:float = None, multiple_parents:bool = False):
         self.title = title
         self.connections = []
+        self.multiple_parents = multiple_parents
+        self.multiple_parents_connections = []
 
         if probability_of_success is not None:
             if probability_of_success > 1 or probability_of_success < 0:
@@ -88,11 +90,43 @@ class Node:
         
         return True
 
+    def add_connection_multiple_parents(self, parent_nodes:dict, probability_of_success:float):
+        if probability_of_success > 1 or probability_of_success < 0:
+            print('Probability "' + str(probability_of_success) + '" cant be used.')
+            return False
+        
+        if len(parent_nodes.values()) <=1:
+            print('You should use this function when there is a connection of more than 2 nodes, use add_connection() over the parent of this node instead')
+            return False
+
+        for value in parent_nodes.values():
+            if type(value) is not bool:
+                print('You need to provide true or false depending on wether the parent was succesful or not')
+                return False
+
+        new_multiple_connection = {**parent_nodes,**{
+                                        'success':probability_of_success,
+                                        'fail': 1-probability_of_success
+                                    }}
+
+        remodeled_connections = [{field: connection[field] for field in list(connection.keys())[0:-2]} for connection in self.multiple_parents_connections]
+
+        if parent_nodes in remodeled_connections:
+            print('The node "' + self.title + '" already has a parent connection "' + str(parent_nodes) + '"')
+            return False
+
+        self.multiple_parents_connections.append(
+            new_multiple_connection
+        )
+        return True
+
     def edit_connection(self, node_title:str, probability_of_success:float):
         res = self.delete_connection(node_title)
         if res:    
             res = self.add_connection(node_title, probability_of_success)
         return res
+
+
 
 class BayesianNetwork:
     def __init__(self):
@@ -145,7 +179,7 @@ class BayesianNetwork:
             self.add_node(new_node)
         return res
 
-    def get_parents(self, child_node_title:str):
+    def get_parent(self, child_node_title:str):
         return list(
             set(
                 filter(
@@ -155,63 +189,138 @@ class BayesianNetwork:
                 )
             )
         )
+    
+    def get_parents(self, child_node_title:str):
+        current_node = self.get_node(child_node_title)
+
+        connections = []
+
+        for connection in current_node.multiple_parents_connections:
+            connections+= list(connection.keys())[0:-2]
+
+        connections =list(set(connections))
+
+        return list(
+            set(
+                filter(
+                    lambda node: 
+                        node.title in connections, 
+                    self.nodes
+                )
+            )
+        )
+
+    def one_parent_probabilistic_inference(self, node_title:str):
+        parent = self.get_parent(node_title)[0]
+
+        parent_probability = self.probabilistic_inference(parent.title)
+
+        if not parent_probability:
+            return False
+
+        connections = list(
+            filter(
+                lambda connection:
+                connection['title'] == node_title,
+                parent.connections
+            )
+        )
+
+        if len(connections) < 2:
+            print('The amount of connections parent "' + parent.title +'" have to node "' + node_title + '" arent enough.\n')
+            return False
+
+        success_probability = 0
+        fail_probability = 0
+
+        for connection in connections:
+            if connection['parent_success']:
+                success_probability += parent_probability['success'] * connection['success']
+                fail_probability += parent_probability['success'] * connection['fail']
+            else:
+                success_probability += parent_probability['fail'] * connection['success']
+                fail_probability += parent_probability['fail'] * connection['fail']
+
+        if success_probability + fail_probability < 0.95:
+            print('Something went wrong when calculating the probability, currently on node "' + node_title + '"')
+            return False
+        
+        return {
+            'success': success_probability,
+            'fail':fail_probability
+        }
+
+    def multiply_list(myList:list):
+        result = 1
+        for i in range(0,len(myList)):
+            result = result * myList[i]
+        return result
+
+    def multiple_parents_probabilistic_inference(self, node_title:str):
+        current_node = self.get_node(node_title)
+        parents = self.get_parents(node_title)
+        parent_probabilities = []
+        for parent in parents:
+            parent_probabilities.append({parent.title:self.probabilistic_inference(parent.title)})
+
+        success_probability = 0
+        fail_probability = 0
+
+        for connection in current_node.multiple_parents_connections:
+            calculation_probabilites = []
+            for parent_index in range(0,len(parents)):
+                if connection[parents[parent_index].title]:
+                    calculation_probabilites.append(parent_probabilities[parent_index][parents[parent_index].title]['success'])
+                else:
+                    calculation_probabilites.append(parent_probabilities[parent_index][parents[parent_index].title]['fail'])
+            
+            probability_result = 1
+            for i in range(0,len(calculation_probabilites)):
+                probability_result *= calculation_probabilites[i]
+
+            success_probability += probability_result * connection['success']
+            fail_probability += probability_result * connection['fail']
+        
+        return {
+            'success':success_probability,
+            'fail':fail_probability
+        }
 
     def probabilistic_inference(self, node_title:str):
         current_node = self.get_node(node_title)
 
-        if current_node.success is not None: 
+        if current_node.success is not None:
             return {
                 'success': current_node.success,
                 'fail': current_node.fail
             }
         
-        parents = self.get_parents(node_title)
-        parents_title = [parent.title for parent in parents]
-        connections = []
-
-        for parent in parents:
-
-            parent_probability = self.probabilistic_inference(parent.title)
-
-            found_connections = list(
-                filter(
-                    lambda connection:
-                    connection['title'] == node_title,
-                    parent.connections
-                )
-            )
-
-            for connection in found_connections:
-                connection['parent'] = parent.title
-
-            connections += found_connections
+        if current_node.multiple_parents:
+            return self.multiple_parents_probabilistic_inference(node_title)
+        else:
+            return self.one_parent_probabilistic_inference(node_title)
         
-        if len(connections) < len(parents)*2:
-            print('The amount of connections parents have to node "' + node_title + '" arent enough.\n You are missing ' + str(len(parents)*2 - len(connections)) + " connections.")
 
-        for parent in parents:
+node_a = Node('a',0.01)
+node_a.add_connection('b',0.9,True)
+node_a.add_connection('b',0.8,False)
+node_a.add_connection('c',0.9,True)
+node_a.add_connection('c',0.8,False)
 
 
-node_a = Node('a',0.6)
-node_a.add_connection('b',0.4,True)
-node_a.add_connection('b',0.4,False)
 
 node_b = Node('b')
-node_b.add_connection('c',0.5, True)
-node_b.add_connection('c',0.5, False)
 
-node_c = Node('c')
-node_c.add_connection('d',0.3,True)
-node_c.add_connection('d',0.8,False)
-
-node_c_replace = Node('c')
-node_c_replace.add_connection('d',0.4,True)
-node_c_replace.add_connection('d',0.7,False)
+node_c = Node('c', multiple_parents= False)
+""" node_c.add_connection_multiple_parents({ 'a':True,'b':True},0.9)
+node_c.add_connection_multiple_parents({ 'a':True,'b':False},0.5)
+node_c.add_connection_multiple_parents({ 'a':False,'b':True},0.7)
+node_c.add_connection_multiple_parents({ 'a':False,'b':False},0.2) """
 
 network = BayesianNetwork()
 network.add_node(node_a)
 network.add_node(node_b)
 network.add_node(node_c)
 
-print(network.probabilistic_inference('b'))
+print(network.probabilistic_inference('a'))
 
