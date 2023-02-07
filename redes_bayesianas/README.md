@@ -11,7 +11,9 @@ Con el manejador de paquetes pip:
 ## Uso
 
 <sub> 
-    import redes_bayesianas
+    
+    # importa la libreria
+    import redes_bayesianas_20074
 
     # Crea una red bayesiana
     red_bayesiana = mi_libreria_python.BayesianNetwork()
