@@ -5,7 +5,8 @@ Una librería para construir redes bayesianas y realizar inferencia probabilíst
 ## Instalación
 
 Con el manejador de paquetes pip:
-\_pip install --index-url https://test.pypi.org/simple/ --no-deps redes_bayesianas_rey20074
+
+- pip install --index-url https://test.pypi.org/simple/ --no-deps redes_bayesianas_rey20074
 
 ## Uso
 
