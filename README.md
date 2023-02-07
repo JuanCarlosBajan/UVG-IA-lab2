@@ -49,12 +49,28 @@ Con el manejador de paquetes pip:
 
 Se incluyen las siguientes clases
 
+### Clase Node
+
+- **init**(self, title: str, probability_of_success: float = None, multiple_parents: bool = False)
+- add_connection(self, next_node_title: str, probability_of_success: float, parent_was_succesful: bool)
+- get_children(self)
+- get_children_title(self)
+- delete_connection(self, node_title: str)
+- delete_connection(self, node_title: str, parent_was_succesful: bool)
+- add_connection_multiple_parents(self, parent_nodes: dict, probability_of_success: float)
+- edit_connection(self, node_title: str, probability_of_success: float)
+
 ### Clase BayesianNetwork
 
-- add_node(nombre, valores, probabilidades): Agrega un nodo a la red bayesiana con el nombre especificado, los valores posibles y las probabilidades iniciales.
-
-- add_edge(nodo_padre, nodo_hijo, probabilidades): Agrega una relación entre dos nodos de la red bayesiana, especificando las probabilidades condicionales.
-
-### Clase Inference
-
-- probability(nodo, evidencias): Devuelve la distribución de probabilidad de un nodo dado un conjunto de evidencias.
+- **init**(self)
+- get_nodes(self)
+- get_node(self, node_title: str)
+- delete_node(self, node_title: str)
+- add_node(self, node: Node)
+- replace_node(self, node_title: str, new_node: Node)
+- get_parent(self, child_node_title: str)
+- get_parents(self, child_node_title: str)
+- one_parent_probabilistic_inference(self, node_title: str
+- multiply_list(myList: list)
+- multiple_parents_probabilistic_inference(self, node_title: str)
+- probabilistic_inference(self, node_title: str)
