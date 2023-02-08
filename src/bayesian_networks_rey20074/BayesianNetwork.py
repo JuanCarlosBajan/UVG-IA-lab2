@@ -325,11 +325,15 @@ class BayesianNetwork:
         nodes = network.get_nodes()
         for node in nodes:
             representation += (
-                node.get_name()
-                + " -> Children: "
-                + ", ".join([child.get_name() for child in node.get_children()])
-                + " | Parents: "
-                + ", ".join([parent.get_name() for parent in node.get_parents()])
+                node.get_index()
+                + " -> "
+                + ", ".join([str(child.get_index()) for child in node.get_children()])
+                + "\n"
+            )
+            representation += (
+                ", ".join([str(parent.get_index()) for parent in node.get_parents()])
+                + " <- "
+                + node.get_index()
                 + "\n"
             )
         return representation
