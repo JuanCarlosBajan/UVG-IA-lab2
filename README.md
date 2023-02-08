@@ -43,6 +43,10 @@ Con el manejador de paquetes pip:
 
     print(network.probabilistic_inference('m'))
     desc = network.is_fully_described()
+    
+    # Imprime la forma compacta de la red
+    representation = BayesianNetwork.BayesianNetwork.get_compact_representation(network)
+    print(representation)
 
     if (desc == True):
         print("Red Bayesiana Descriptiva")
@@ -80,4 +84,5 @@ Se incluyen las siguientes clases
 - multiply_list(myList: list)
 - multiple_parents_probabilistic_inference(self, node_title: str)
 - probabilistic_inference(self, node_title: str)
-- def is_fully_described(self)
+- get_compact_representation(network)
+- is_fully_described(self)
