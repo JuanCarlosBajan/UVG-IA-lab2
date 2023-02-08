@@ -27,5 +27,5 @@ network.add_node(node_m)
 
 print(network.probabilistic_inference("m"))
 
-representation = BayesianNetwork.get_compact_representation(network)
+representation = BayesianNetwork.BayesianNetwork.get_compact_representation(network)
 print(representation)
