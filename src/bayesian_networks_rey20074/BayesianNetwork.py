@@ -320,29 +320,25 @@ class BayesianNetwork:
         else:
             return self.one_parent_probabilistic_inference(node_title)
 
-    def get_compact_representation(network):
+    def get_compact_representation(self):
         representation = ""
-        nodes = network.get_nodes()
+        nodes = self.get_nodes()
         for node in nodes:
             representation += (
-                node.get_index()
+                node.title
                 + " -> "
-                + ", ".join([str(child.get_index()) for child in node.get_children()])
-                + "\n"
-            )
-            representation += (
-                ", ".join([str(parent.get_index()) for parent in node.get_parents()])
+                + ", ".join([child["title"] for child in node.get_children()])
                 + " <- "
-                + node.get_index()
+                + ", ".join([parent["title"] for parent in node.get_parents()])
                 + "\n"
             )
         return representation
-    
+
     def is_fully_described(self):
         for node in self.nodes:
             if len(node.connections) == 0:
                 return False
             for connection in node.connections:
-                if connection['success'] + connection['fail'] != 1:
+                if connection["success"] + connection["fail"] != 1:
                     return False
         return True
