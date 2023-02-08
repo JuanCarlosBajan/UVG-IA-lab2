@@ -42,6 +42,12 @@ Con el manejador de paquetes pip:
     network.add_node(node_m)
 
     print(network.probabilistic_inference('m'))
+    desc = network.is_fully_described()
+
+    if (desc == True):
+        print("Red Bayesiana Descriptiva")
+    else:
+        print("Red Bayesiana No Descriptiva")
 
 </sub>
 
@@ -74,3 +80,4 @@ Se incluyen las siguientes clases
 - multiply_list(myList: list)
 - multiple_parents_probabilistic_inference(self, node_title: str)
 - probabilistic_inference(self, node_title: str)
+- def is_fully_described(self)
