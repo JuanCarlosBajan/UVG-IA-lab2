@@ -43,6 +43,10 @@ Con el manejador de paquetes pip:
 
     print(network.probabilistic_inference('m'))
     desc = network.is_fully_described()
+    
+    # Imprime la forma compacta de la red
+    representation = BayesianNetwork.BayesianNetwork.get_compact_representation(network)
+    print(representation)
 
     if (desc == True):
         print("Red Bayesiana Descriptiva")
