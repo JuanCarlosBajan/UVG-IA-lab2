@@ -80,4 +80,5 @@ Se incluyen las siguientes clases
 - multiply_list(myList: list)
 - multiple_parents_probabilistic_inference(self, node_title: str)
 - probabilistic_inference(self, node_title: str)
-- def is_fully_described(self)
+- get_compact_representation(network)
+- is_fully_described(self)
