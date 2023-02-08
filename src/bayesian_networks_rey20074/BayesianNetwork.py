@@ -337,3 +337,12 @@ class BayesianNetwork:
                 + "\n"
             )
         return representation
+    
+    def is_fully_described(self):
+        for node in self.nodes:
+            if len(node.connections) == 0:
+                return False
+            for connection in node.connections:
+                if connection['success'] + connection['fail'] != 1:
+                    return False
+        return True
