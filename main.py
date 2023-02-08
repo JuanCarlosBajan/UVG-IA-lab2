@@ -29,3 +29,10 @@ print(network.probabilistic_inference("m"))
 
 representation = BayesianNetwork.BayesianNetwork.get_compact_representation(network)
 print(representation)
+
+desc = network.is_fully_described()
+
+if (desc == True):
+    print("Red Bayesiana Descriptiva")
+else:
+    print("Red Bayesiana No Descriptiva")
