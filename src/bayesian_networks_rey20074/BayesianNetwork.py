@@ -323,16 +323,32 @@ class BayesianNetwork:
     def get_compact_representation(self):
         representation = ""
         nodes = self.get_nodes()
+
         for node in nodes:
-            representation += (
-                node.title
-                + " -> "
-                + ", ".join([child["title"] for child in node.get_children()])
-                + " <- "
-                + ", ".join([parent["title"] for parent in node.get_parents()])
-                + "\n"
-            )
+            if node.get_children():
+                representation += (
+                    node.title
+                    + " -> "
+                    + ", ".join(list(set([child["title"] for child in node.get_children()])))
+                    + "\n"
+                )
+            if node.multiple_parents:
+                for parent in self.get_parents(node.title):
+                    representation += (
+                        parent.title
+                        + " -> "
+                        + node.title
+                        + "\n"
+                    )
         return representation
+    
+    def get_all_representations(self):
+        colections = []
+        for node in self.nodes:
+            colections += node.connections
+            colections += node.multiple_parents_connections
+        return [col for col in colections if col != []]
+
 
     def is_fully_described(self):
         for node in self.nodes:
