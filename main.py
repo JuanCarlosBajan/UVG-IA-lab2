@@ -27,7 +27,7 @@ network.add_node(node_m)
 print('## GET PROBABILISTIC INFERENCE')
 print(network.probabilistic_inference("m"))
 
-print('## GET COMPACT REPRESENTATION')
+print('\n## GET COMPACT REPRESENTATION')
 representation = network.get_compact_representation()
 print(representation)
 
@@ -36,6 +36,7 @@ collections = network.get_all_representations()
 for x in collections:
     print(x)
 
+print('\n## GET IS FULLY DESCRIBED')
 desc = network.is_fully_described()
 
 if (desc == True):
