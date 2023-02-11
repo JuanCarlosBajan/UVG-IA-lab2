@@ -90,4 +90,5 @@ Se incluyen las siguientes clases
 - multiple_parents_probabilistic_inference(self, node_title: str)
 - probabilistic_inference(self, node_title: str)
 - get_compact_representation(network)
+- get_all_representations(self)
 - is_fully_described(self)
