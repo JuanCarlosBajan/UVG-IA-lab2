@@ -41,7 +41,7 @@ Con el manejador de paquetes pip:
     print('## GET PROBABILISTIC INFERENCE')
     print(network.probabilistic_inference("m"))
 
-    print('## GET COMPACT REPRESENTATION')
+    print('\n## GET COMPACT REPRESENTATION')
     representation = network.get_compact_representation()
     print(representation)
 
@@ -50,7 +50,7 @@ Con el manejador de paquetes pip:
     for x in collections:
         print(x)
 
-    print('## GET IS FULLY DESCRIBED')
+    print('\n## GET IS FULLY DESCRIBED')
     desc = network.is_fully_described()
 
     if (desc == True):
